@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/pagination.html' import render_pagination %}
+
+{% block title %}Lacy- 清单{% endblock %} 
+
+{% block page_content %}
+<div class="my-container">
+    <div class="row">
+        {% include '_sidebar.html' %}
+        <div class="main">
+            <div class="main_header">
+                <div class="main_header_up"></div>
+                <div class="main_header_down">
+                    <p>追剧清单</p>
+                </div>
+            </div>
+            {% set sort=request.args.get('sort', '1') %}
+            <div id="myList" class="detail_box">
+                <div class="box-header">
+                    <span id="s-update" class="ml-1 {% if sort == '1' %}active{% endif %}">
+                        <a href="{{ url_for('main.subscribe_list', sort=1) }}">更新排序</a>
+                    </span>
+                    <span id="s-watch" class="ml-1 {% if sort == '2' %}active{% endif %}">
+                        <a href="{{ url_for('main.subscribe_list', sort=2) }}">观看排序</a>
+                    </span>
+                    <span class="ml-2">{{ pagination.total }}个项目</span>
+                </div>
+                <div class="main_content">
+                    <div class="sub_list">
+                    {% if mylists %}
+                    {% for item in mylists %}
+                    {% set i = item['tv'] %}
+                        <div class="sub_list_item">
+                            <div class="sub_list_li clearfix">
+                                <div class="sub_list_img">
+                                    <a href="{{ url_for('main.tv_detail', tv_id=i['id']) }}" target="_blank">
+                                        <img src="{{ url_for('static', filename=i['img_sm']) }}" alt="{{ i['name'] }}">
+                                    </a>
+                                </div>
+                                <div class="sub_list_txt">
+                                    <p class="p1"><a href="{{ url_for('main.tv_detail', tv_id=i['id']) }}" target="_blank">{{i['name']}}</a></p>
+                                    {% if i.is_finished %}
+                                        <P class="p2 {% if sort=='1' %}strong{% endif %}">完结</P>
+                                        <p class="p2 {% if sort=='2' %}strong{% endif %}">
+                                            {% if HistoryTV.watched_to(current_user, i) %}
+                                                {{ '观看至' + HistoryTV.watched_to(current_user, i) }}
+                                            {% else %}
+                                                尚未观看
+                                            {% endif %}
+                                        </p>
+                                        <p class="p2">共{{ i['episodes'] }}集</p>
+                                    {% else %}
+                                        <P class="p2">
+                                            {{ i.update_detail_for_human }}更新
+                                        </P>
+                                        <p class="p2 {% if sort=='2' %}strong{% endif %}">
+                                            {% if HistoryTV.watched_to(current_user, i) %}
+                                                {{ '观看至' + HistoryTV.watched_to(current_user, i) }}
+                                            {% else %}
+                                                尚未观看
+                                            {% endif %}
+                                        </p>
+                                        <p class="p2 {% if sort=='1' %}strong{% endif %}">更新至{{ i['new_episode'] }}集</p>
+                                    {% endif %}
+                                    <div class="sub_list_btn" {# onclick="atlOpenCollection({{ i.id|string }}) #}">
+                                        <div class="btn-group dropright">
+                                            <button type="button" class="btn btn-danger " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                {% if HistoryTV.is_finished(current_user, i) %}
+                                                <a class="dropdown-item" href="javascript:void(0);" onclick="unsetWatched({{ i.id }})">取消已看完</a>
+                                                {% else %}
+                                                <a class="dropdown-item" href="javascript:void(0);" onclick="setWatched({{ i.id }})">已看完</a>
+                                                {% endif %}
+                                                {# <div class="dropdown-divider"></div> #}
+                                                <a class="dropdown-item" href="javascript:void(0);" onclick="atlOpenCollection({{ i.id }})">添加至清单</a>
+                                                <a class="dropdown-item" href="javascript:void(0);" onclick="unsubscribeTV({{ i.id }})">取消追剧</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                    </div>
+                    <div class="my_pagination">
+                    {{ render_pagination(pagination, size='sm', align='center') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% include '_pop_window.html' %}
+
+{% endblock page_content %}
+

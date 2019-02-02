@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}{{tv['name']}}- 电视剧{% endblock %} 
+
+{% block page_content %}
+<div class="my-container">
+    <div class="row">
+        {% include '_sidebar.html' %}
+        <div class="main">
+            <div class="main_detail">
+                <div class="main_detail_up">
+                    <span class="detail name">{{ tv['name'] }}</span>
+                    {% if tv['alias'] %}
+                    <span class="detail alias">（{{ tv['alias'] }}）</span>
+                    {% endif %}
+                    <div class="detail score">
+                        <span class="detail score1">豆瓣评分： </span>
+                        <span class="detail score2">{{ tv['score'] }}</span>
+                    </div>
+                </div>
+                <div class="main_detail_down clearfix">
+                    <div class="detail_img clearfix">
+                        <img src="{{ url_for('static', filename=tv['img_sm']) }}">
+                    </div>
+                    <div class="detail_txt">
+                        <span class="p1">类型：{{tv['tv_type']}}</span>
+                        <span class="p1">地区：{{tv['country']}}</span>
+                        <span class="p1">时间：{{tv['tv_release']}}</span>
+                        <span class="p2">主演：{{tv['stars']}}</span>
+                        {% if tv.is_finished %}
+                        <span class="p2">完结/共{{tv['episodes']}}集</span>
+                        {% else %}
+                        <span class="p2">更新至{{ tv['new_episode'] }}/共{{tv['episodes']}}集</span>
+                        <span class="p2">{{ tv.update_detail_for_human or '未知' }} 更新</span>
+                        {% endif %}
+                        <br>
+                        <span class="p3"><strong>简介：</strong>{{tv['summery']}}</span>
+                    </div>
+                </div>
+                <div class="main_detail_state">
+                    {% if current_user.is_authenticated and current_user.tv_is_subscribed(tv) %}
+                        <a class="unsub_btn_big" href="javascript:void(0);" onclick="unsubscribeTV({{ tv['id'] }})">已追</a>
+                    {% else %}
+                        <a class="sub_btn_big" href="javascript:void(0);" onclick="subscribeTV({{ tv['id'] }})">追剧</a>
+                    {% endif %}
+                    {% if current_user.is_authenticated and history_tv and history_tv.finished %}
+                        <a class="unwat_btn_big" href="javascript:void(0);" onclick="unsetWatched({{ tv['id'] }})">已看完</a>
+                    {% else %}
+                        <a class="wat_btn_big" href="javascript:void(0);" onclick="setWatched({{ tv['id'] }})">未看完</a>
+                    {% endif %}
+                        <a class="gat_btn_big" href="javascript:void(0);" onclick="atlOpenCollection({{ tv['id'] }})">添加至清单</a>
+                </div>
+            </div>
+            <div class="detail_box">
+                <div class="box-header">
+                    分集列表
+                    <a href="#">123</a>
+                </div>
+                <div class="main_content">
+                    <form class="form-c" action="{{ url_for('main.modify_history_ep', tv_id=tv['id']) }}" method="post">
+                        {% for n in range(1, tv['episodes']+1)%}
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            {% if n in watched_episodes %}
+                            <input name="episodes" type="checkbox" class="custom-control-input" id="customCheckInline{{n}}" value="{{n}}" checked="checked">
+                            {% else %}
+                            <input name="episodes" type="checkbox" class="custom-control-input" id="customCheckInline{{n}}" value="{{n}}">
+                            {% endif %}
+                            <label class="custom-control-label" for="customCheckInline{{n}}">{{n}}</label>
+                        </div>
+                        {% endfor %}
+                        <button type="submit" id="ep_submit" class="btn my_btn_sm">提交</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="要修改2" class="detail_box">
+                <div class="box-header">
+                    资源列表
+                    <a href="#">1232132132</a>
+                </div>
+                <div class="main_content">
+                    <p>第一条</p>
+                </div>
+            </div>
+            <div id="要修改3" class="detail_box">
+                <div class="box-header">
+                    搜索列表
+                    <a href="#">123</a>
+                </div>
+                <div class="main_content">
+                    <p>第一已条</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include '_pop_window.html' %}
+
+{% endblock page_content %}

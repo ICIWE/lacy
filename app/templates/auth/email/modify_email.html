@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    {{ bootstrap.load_css() }}
+    <title>Lacy - 修改绑定邮箱</title>
+</head>
+<body>
+    <div class="container">
+        <br>
+        <h2>{{ user.username }} 您好！</h2>
+        <br>
+        <p>修改绑定邮箱</p>
+        <p>下面是修改绑定邮箱的链接，点击以完成修改绑定邮箱：
+            <a href="{{ url_for('auth.modify_email', token=token, _external=True) }}">
+            {{ url_for('auth.modify_email', token=token, _external=True) }}</a>
+        </p>
+        <hr>
+        <p>Lacy</p>
+    </div>
+
+    {{ bootstrap.load_js() }}
+</body>
+</html>

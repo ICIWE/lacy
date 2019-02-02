@@ -1,0 +1,65 @@
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+# SQLite databases
+*.sqlite
+
+# Virtual environment
+venv
+
+
+# Pycharm
+.idea
+.pytest_cache
+
+# migrate
+migrations
+
+# -------------------------------- my  -------------------------------
+# 图片
+images
+cover
+full
+
+# 需保密的环境配置文件
+.env
+
+# 备份
+*.bak
+
+# 临时测试用
+demo.py

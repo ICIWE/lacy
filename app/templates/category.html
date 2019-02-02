@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/pagination.html' import render_pagination %}
+
+{% block title %}分类 - Lacy {% endblock %}
+
+{% block page_content %}  
+
+<div class="my-container">
+    <div class="category-nav detail_box">
+
+        {% set key_map = {'tv_types': '类型', 'serialized': '状态', 'country': '地区', 'year': '年代'} %}
+        {% set serialized_map = {'0': '未知', '1': '连载', '2': '完结', '3': '未开播'} %}
+
+        <div class="category-row">
+            <div class="field serialized">{{ key_map['serialized'] }}</div>
+            <div class="field-item">
+                <ul>
+                    {% for i in categories['serialized'] %}
+                        {% if i == request.args.get('serialized', '')%}
+                        <li class="active"><a onclick="_query({serialized: '{{ i }}'})">{{ serialized_map.get(i) or '全部' }}</a></li>
+                        {% else %}
+                        <li class=""><a onclick="_query({serialized: '{{ i }}'})">{{ serialized_map.get(i) or '全部' }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="category-row">
+            <div class="field tv_type">{{ key_map['tv_types'] }}</div>
+            <div class="field-item">
+                <ul>
+                    {% for i in categories['tv_types'] %}
+                        {% if i == request.args.get('tv_type', '')%}
+                        <li class="active"><a onclick="_query({tv_type: '{{ i }}'})">{{ i or '全部' }}</a></li>
+                        {% else %}
+                        <li class=""><a onclick="_query({tv_type: '{{ i }}'})">{{ i or '全部' }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="category-row">
+            <div class="field contory">{{ key_map['country'] }}</div>
+            <div class="field-item">
+                <ul>
+                    {% for i in categories['country'] %}
+                        {% if i == request.args.get('country', '')%}
+                        <li class="active"><a onclick="_query({country: '{{ i }}'})">{{ i or '全部' }}</a></li>
+                        {% else %}
+                        <li class=""><a onclick="_query({country: '{{ i }}'})">{{ i or '全部' }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="category-row">
+            <div class="field year">{{ key_map['year'] }}</div>
+            <div class="field-item">
+                <ul>
+                    {% for i in categories['year'] %}
+                        {% if i == request.args.get('year', '')%}
+                        <li class="active"><a onclick="_query({year: '{{ i }}'})">{{ i or '全部' }}</a></li>
+                        {% else %}
+                        <li class=""><a onclick="_query({year: '{{ i }}'})">{{ i or '全部' }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="detail_box totaltv">
+        <div class="main_content">
+            <div class="row">
+            {% if tv %}
+                {% for i in tv %}
+                <div class="col-3">
+                    <div class="sub sub-img">
+                        <a href="{{ url_for('main.tv_detail', tv_id=i['id']) }}" target="_blank">
+                            <img src="{{ url_for('static', filename=i['img_sm']) }}" alt="{{i['name']}}">
+                        </a>
+                    </div>
+                    <div class="sub sub-txt">
+                        <p class="p1">
+                            <a href="{{ url_for('main.tv_detail', tv_id=i['id']) }}" target="_blank">{{i['name']}}</a>
+                        </p>
+                        {% if i.serialized == '2' %}
+                        <p class="p2" style="color: gray">共{{i['episodes']}}集</p>
+                        {% else %}
+                        <p class="p2" style="color: gray">更新至{{ i.new_episode }}</p>
+                        {% endif %}
+                        {% if current_user.is_authenticated and current_user.tv_is_subscribed(i) %}
+                        <a href="javascript:void(0);" class="btn-unsubscribe" onclick="unsubscribeTV({{ i['id'] }})">已追</a>
+                        {% else %}
+                        <a href="javascript:void(0);" class="btn-subscribe" onclick="subscribeTV({{ i['id'] }})">追剧</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+            </div>
+            <div class="my_pagination">
+            {{ render_pagination(pagination, size='sm', align='center') }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock page_content %}

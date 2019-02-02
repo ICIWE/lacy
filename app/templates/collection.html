@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/pagination.html' import render_pagination %}
+
+{% block title %}Lacy- 清单{% endblock %} 
+
+{% block page_content %}
+<div class="my-container">
+    <div class="row">
+        {% include '_sidebar.html' %}
+        <div class="main">
+            <div class="main_header">
+                <div class="main_header_up">
+                    {% if current_user.is_authenticated and current_user.id==my_c.user_id %}
+                        <div class="co-remove">
+                            <a href="#" data-toggle="modal" data-target="#co-del-con">删除！</a>
+                        </div>
+                        <div class="co-modify">
+                            <p class="co-md-txt" onclick="modifyCollection({{ my_c.id }})">(ง •_•)ง</p>
+                        </div>
+                    {% elif current_user.is_authenticated and current_user.col_is_store_up(my_c) %}
+                        <div class="co-store"><p class="co-store-txt" onclick="unstoreUpCollection({{ my_c.id }})">取消收藏</p></div>
+                    {% else %}
+                        <div class="co-store"><p class="co-store-txt" onclick="storeUpCollection({{ my_c.id }})">收藏</p></div>
+                    {% endif %}
+                </div>
+                <div class="main_header_down">
+                    {# 当前的位置 #}
+                    <p>{{ my_c.name }}</p>
+                </div>
+                {# 确认删除-弹窗 #}
+                <div class="modal fade" id="co-del-con" tabindex="-1" role="dialog" aria-labelledby="co-del-con-label" aria-hidden="true">
+                    <div class="modal-dialog modal-sm" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title" id="co-del-con-label">确认删除？</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="javascript:void(0);" role="button" class="can-btn" data-dismiss="modal">取消</a>
+                                <a href="{{ url_for('main.collection_delete', cid=my_c.id) }}" role="button" class="con-btn">确认</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="detail_box">
+                <div class="box-header">
+                    {{ my_c.count }} 个项目
+                </div>
+                <div class="main_content">
+                    <div class="sub_list">
+                    {% if tv_list %}
+                    {% for i in tv_list %}
+                        <div class="sub_list_item">
+                            <div class="sub_list_li clearfix">
+                                <div class="sub_list_img">
+                                    <a href="{{ url_for('main.tv_detail', tv_id=i['id']) }}" target="_blank">
+                                        <img src="{{ url_for('static', filename=i['img_sm']) }}" alt="{{ i['name'] }}">
+                                    </a>
+                                </div>
+                                <div class="sub_list_txt">
+                                    <p class="p1"><a href="{{ url_for('main.tv_detail', tv_id=i['id']) }}" target="_blank">{{i['name']}}</a></p>
+                                    {% if i.is_finished %}
+                                        <P class="p2">完结</P>
+                                        {% if current_user.is_authenticated and HistoryTV.watched_to(current_user, i) %}
+                                        <p class="p2">{{ '观看至' + HistoryTV.watched_to(current_user, i) }}</p>
+                                        {% else %}
+                                        <p class="p2">尚未观看</p>
+                                        {% endif %}
+                                        <p class="p2">共{{ i['episodes'] }}集</p>
+                                    {% else %}
+                                        <P class="p2">{{ i.update_detail_for_human }}更新</P>
+                                        {% if current_user.is_authenticated and HistoryTV.watched_to(current_user, i) %}
+                                        <p class="p2">{{ '观看至' + HistoryTV.watched_to(current_user, i) }}</p>
+                                        {% else %}
+                                        <p class="p2">尚未观看</p>
+                                        {% endif %}
+                                        <p class="p2">更新至{{ i['new_episode'] }}集</p>
+                                    {% endif %}
+                                    <div class="sub_list_btn">
+                                        <div class="btn-group dropright">
+                                            <button type="button" class="btn btn-danger " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                {% if current_user.is_authenticated and HistoryTV.is_finished(current_user, i) %}
+                                                <a class="dropdown-item" href="javascript:void(0);" onclick="unsetWatched({{ i.id }})">取消已看完</a>
+                                                {% else %}
+                                                <a class="dropdown-item" href="javascript:void(0);" onclick="setWatched({{ i.id }})">已看完</a>
+                                                {% endif %}
+                                                <a class="dropdown-item" href="javascript:void(0);" onclick="atlOpenCollection({{ i.id }})">添加至清单</a>
+                                                {% if current_user.is_authenticated and current_user.tv_is_subscribed(i) %}
+                                                <a class="dropdown-item" href="javascript:void(0);" onclick="unsubscribeTV({{ i.id }})">取消追剧</a>
+                                                {% else %}
+                                                <a class="dropdown-item" href="javascript:void(0);" onclick="subscribeTV({{ i.id }})">追剧</a>
+                                                {% endif %}
+                                                {% if current_user.is_authenticated and current_user.id==my_c.user_id %}
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="javascript:void(0);" onclick="removeFromCollection({{ my_c.id }}, {{ i.id }})">删除</a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% else %}
+                    <h6>空空如也</h6>
+                    {% endif %}
+                    </div>
+                    {% if pagination %}
+                    <div class="my_pagination">
+                    {{ render_pagination(pagination, size='sm', align='center') }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include '_pop_window.html' %}
+{% endblock page_content %}

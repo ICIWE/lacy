@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}账户修改- Lacy{% endblock %}
+
+{% block page_content %}
+
+<div class="container" style="width: 500px; padding: 60px">
+    <h3>修改邮箱</h3>
+    <br>
+    <br>    
+    {{ render_form(form, button_map={'submit': 'primary'}) }}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Lacy {% endblock %}
+
+{% block page_content %}
+<div style="width: 200px; height: 100px; overflow: hidden; max-width: 200px; height: 100px;">
+  <img style="width:200px; height: 600px;" src="{{ url_for('static', filename='full/30142136.jpg') }}" alt="tr" >
+</div>
+<div class="container display-box">
+<div class="box-header">最近更新</div>
+
+<div class="filter">
+    <form action="get" class="gaia_frm" autocomplete="off">
+        <input name="type" value="tv" type="visible">
+        <div class="tags">
+            <div class="tag-list"><label class="">
+            热门
+            <input type="radio" name="tag" value="热门">
+            
+        </label>
+    
+        <label class="">
+            美剧
+            <input type="radio" name="tag" value="美剧">
+            
+        </label>
+    
+        <label class="">
+            英剧
+            <input type="radio" name="tag" value="英剧">
+            
+        </label>
+    
+        <label class="">
+            韩剧
+            <input type="radio" name="tag" value="韩剧">
+            
+        </label>
+    
+        <label class="">
+            日剧
+            <input type="radio" name="tag" value="日剧">
+            
+        </label>
+    
+        <label class="">
+            国产剧
+            <input type="radio" name="tag" value="国产剧">
+            
+        </label>
+    
+        <label class="activate">
+            港剧
+            <input type="radio" name="tag" value="港剧" checked="checked">
+            
+        </label>
+    
+        <label class="">
+            日本动画
+            <input type="radio" name="tag" value="日本动画">
+            
+        </label>
+    
+        <label>
+            综艺
+            <input type="radio" name="tag" value="综艺">
+            
+        </label>
+    
+        <label>
+            纪录片
+            <input type="radio" name="tag" value="纪录片">
+            
+        </label></div>
+            <div class="custom-frm" data-type="tag" style="display: none;">
+                <input type="text">
+                <button>确定</button>
+            </div>
+        </div>
+        <div class="sub-tags">
+            <p class="tip">在 “<strong>热门</strong>” 里进一步筛选：</p>
+            <div class="sub-tag-list"></div>
+            <div class="custom-frm" data-type="sub_tag">
+                <input type="text">
+                <button>确定</button>
+            </div>
+        </div>
+        <div class="tool">
+            <div class="sort">
+                <label>
+                    <input type="radio" name="sort" value="recommend" checked="checked">按热度排序
+                </label>
+                <label>
+                    <input type="radio" name="sort" value="time">按时间排序
+                </label>
+                <label>
+                    <input type="radio" name="sort" value="rank">按评价排序
+                </label>
+            </div>
+
+            <div class="check">
+                <label>
+                    <input type="checkbox" name="watched" class="">我没看过的
+                </label>
+                <label>
+                    <input type="checkbox" name="playable">可在线播放
+                </label>
+            </div>
+            <input type="hidden" name="page_limit" value="20">
+            <input type="hidden" name="page_start" value="0">
+        </div>
+    </form>
+    <div class="login-tip">
+        注册登录后可以保存自己的观影记录，豆瓣也会根据你的口味为你推荐电影。
+        <a href="javascript:;" class="pop_register" data-ref="https://movie.douban.com?tag_search=true">注册</a> &nbsp;
+        <a href="javascript:;" class="pop_login" data-ref="https://movie.douban.com?tag_search=true">登录</a>
+    </div>
+</div>
+<form class="f1" action="get" autocomplete="off">
+    <input type="hidden" name="type" value="tv">
+    <div class="tags">
+      <div class="tag-list">
+        <label class="">热门<input type="radio" name="tag" value="热门"></label>
+        <label class="">美剧<input type="radio" name="tag" value="美剧"></label>
+        <label class="">日剧<input type="radio" name="tag" value="日剧"></label>
+        <label class="">国产剧<input type="radio" name="tag" value="国产剧"></label>
+      <div class="f1" data-type="tag">
+        <input type="text">
+        <button>确定</button>
+      </div>
+      </div>
+    </div>
+</form>
+</div>
+
+
+
+{% endblock %}

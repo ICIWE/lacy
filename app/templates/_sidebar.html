@@ -1,0 +1,24 @@
+<nav class="sidebar">
+    <ul class="nav flex-column">
+        <li class="nav-item"><a href="{{ url_for('main.subscribe_list') }}" class="nav-link {% if request.path == url_for('main.subscribe_list') %}active{% endif %}">追剧清单</a></li>
+        {# <li class="nav-item"><a href="#" class="nav-link">我的时刻表</a></li> #}
+        <li class="nav-item"><a href="{{ url_for('main.watched_list') }}" class="nav-link {% if request.path == url_for('main.watched_list') %}active{% endif %}">已看完</a></li>
+        {# <li class="nav-item"><a href="#" class="nav-link">星</a></li> #}
+    </ul>
+    <div class="sidebar-head1">
+        <span class="sh-head1" onclick="sidebarHead1SlideToggle()">创建的清单</span>
+        <span class="sh-add" onclick="createMyList()">▣</span>
+    </div>
+    <ul class="mylist nav flex-column mb-2">
+        {% for cc in my_cs %}
+        <li class="nav-item"><a href="{{ url_for('main.collection_list', collection_id=cc.id) }}" class="nav-link {% if request.path == url_for('main.collection_list', collection_id=cc.id) %}active{% endif %}">{{ cc.name }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <div class="sidebar-head2">
+        <span class="sh-head2" onclick="sidebarHead2SlideToggle()">收藏的清单</span>
+    </div>
+    <ul class="mycollection  nav flex-column mb-2">
+        <li class="nav-item"><a href="#" class="nav-link"> 1231</a></li>
+    </ul>
+</nav>

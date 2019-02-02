@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}注册- Lacy{% endblock %}
+
+{% block page_content %}
+
+<div class="container" style="width: 500px; padding: 60px">
+
+    {{ render_form(form, button_map={'submit': 'primary'}) }}
+
+</div>
+
+{% endblock %}

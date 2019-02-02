@@ -1,0 +1,70 @@
+<div class="pop-up-window">
+
+    <div class="create-my-list">
+        <div class="cml-title">新建清单</div>
+        <div class="cml-close"><p onclick="cmlCancel()">x</p></div>
+        <div class="cml-input">
+            <p>请输入清单名</p>
+            <input id="createListValue" type="text" name="createList">
+        </div>
+        <p id="cmlAlert">标题不能超出15个字符</p>
+        <div class="cml-btns">
+            <a class="can-btn" href="javascript:void(0);" onclick="cmlCancel()">取消</a>
+            <a class="con-btn" href="javascript:void(0);" onclick="cmlConfirm(this)">确认</a>
+        </div>
+    </div>
+
+    <div class="add-to-list">
+        <div class="atl-title">选择清单</div>
+        <div class="atl-close"><p onclick="atlCancel()">x</p></div>
+        <div class="atl-warp">
+            <div class="atl-list">
+                <div class="atl-item" data-id="new" {# onclick="atlCreateCollectionAndAdd()" #}>
+                    <div class="atl-img atl-add-i">
+                    </div>
+                    <div class="atl-text atl-add-t">
+                        <p>新建清单</p>
+                    </div>
+                </div>
+                {% for cc in my_cs %}
+                <div class="atl-item" data-id="{{ cc.id }}"{#  onclick="atlAddToCollection()" #}>
+                    <div class="atl-img">
+                        <img src="{{ url_for('static', filename='default.png') }}">
+                    </div>
+                    <div class="atl-text">
+                        <p class="p1">{{ cc.name }}</p>
+                        <p class="p2">共{{ cc.count }}个项目</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>        
+    </div>
+
+    <div class="modify-co">
+        <div class="mc-title">修改清单</div>  
+        <div class="mc-close"><p class="mc-close-p">x</p></div>
+        <div class="mc-wrap">
+            <div class="mc-img">
+                <img src="{{ url_for('static', filename='default.png') }}">
+                <label class="mc-upload">更改封面<input id="mc-upload-img" name="cover" type="file"></label>
+            </div>
+            <div class="mc-name">
+                <p class="mc-label">清单名</p>
+                <input id="mc-input-name" type="text" name="name" placeholder="清单名不超过15个字符">
+                <p class="mc-warning"></p>
+            </div>
+            <div class="mc-text">
+                <p class="mc-label">简  介</p>
+                <textarea id="mc-input-txt" name="summery" placeholder="简介不超过200个字符（选填）"></textarea>
+                <p class="mc-warning"></p>
+            </div>
+        </div>
+        <div class="mc-btns">
+            <a class="can-btn mc-can" href="javascript:void(0);">取消</a>
+            <a class="con-btn mc-con" href="javascript:void(0);">确认</a>
+        </div>
+    
+    </div>
+
+</div>

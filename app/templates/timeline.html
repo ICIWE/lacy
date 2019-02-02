@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}新剧时刻表 - Lacy {% endblock %}
+
+{% block page_content %}
+
+<div class="timeline-container">
+    <div class="timeline-header">
+        <div class="th-arrow-left"><<</div>
+        <div class="th-date">
+            <ul class="th-date-list">
+{#                 <div class="th-head">
+                    <span class="t-date">2-3</span>
+                    <span class="t-week">周五</span>
+                </div> #}
+                
+            </ul>
+        </div>
+        <div class="th-arrow-right">>></div>
+    </div>
+    <div class="timeline-wrapper">
+        <div class="tw-body-list">
+{#             <div class="tw-column">
+                <div class="tw-item published">
+                    <div class="tw-img">
+                        <a href="#">
+                            <img src="/static/full/26386688.jpg">
+                        </a>
+                    </div>
+                    <div class="tw-txt">
+                        <p class="tw-p1">这是tv标题</p>
+                        <p class="tw-p2">这是详情</p>
+                    </div>
+                </div>
+            </div> #}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+Lacy - 确认邮件
+
+{{ user.username }} 您好！
+
+欢迎使用Lacy
+为了方便找回密码，请点击下面的链接来完成注册：
+{{ url_for('auth.confirm', user=user.id, token=token, _external=True) }}
+
+-------------------------------------------------------------------------------
+Lacy 

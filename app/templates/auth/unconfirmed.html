@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}确认邮件- Lacy{% endblock %}
+
+{% block page_content %}
+
+<div class="container" style="padding: 60px">
+    <h2>你好，{{ current_user.username }}</h2>
+    <br>
+    <h4>确认邮件后，访问此网页。请检查您注册本站时用的邮箱账号，我们已经发送了确认邮件。</h4>
+    <p>
+    没有收到？需要重新发送?<a href="{{ url_for('auth.resend_confirm_email') }}">请点这里...</a>
+    </p>
+</div>
+
+{% endblock %}

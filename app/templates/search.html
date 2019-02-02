@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}搜索- {{ key }}- Lacy{% endblock %} 
+
+{% block page_content %} 
+<div class="my-container">
+    <div class="search_main">
+        <div class="search_msg"><p>“{{ key }}”，共找到 {{ results|length }} 个项目</p></div>
+        <div class="search_result detail_box">
+            <div class="search_content">
+            {% if results %}
+            {% for i in results %}
+                    <div class="search_li clearfix">
+                        <div class="search_li_img">
+                            <a href="{{ url_for('main.tv_detail', tv_id=i['id']) }}" target="_blank">
+                                <img src="{{ url_for('static', filename=i['img_sm']) }}" alt="{{ i['name'] }}">
+                            </a>
+                        </div>
+                        <div class="search_li_d">
+                            <div class="search_li_title">
+                                <a href="{{ url_for('main.tv_detail', tv_id=i['id']) }}" target="_blank">{{ i['name'] }}</a>
+                                <span>{{ i['score'] }}</span>
+                            </div>
+                            {% if current_user.tv_is_subscribed(i) %}
+                            <div class="search_li_subs"><a href="javascript:void(0);" class="btn-unsubscribe" onclick="unsubscribeTV({{ i['id'] }})">已追</a></div>
+                            {% else %}
+                            <div class="search_li_subs"><a href="javascript:void(0);" class="btn-subscribe" onclick="subscribeTV({{ i['id'] }})">追剧</a></div>
+                            {% endif %}
+
+                            {% if not i['new_episode'] %}
+                            <div class="search_li_i1"><p><span>更新至0</span>/共{{ i['episodes'] }}集/{{ i['country'] }}/{{ i['tv_release'] }}</p></div>
+                            {% elif i['episodes'] > i['new_episode'] %}
+                            <div class="search_li_i1"><p><span>更新至{{ i['new_episode'] }}</span>/共{{ i['episodes'] }}集/{{ i['country'] }}/{{ i['tv_release'] }}</p></div>
+                            {% else %}
+                            <div class="search_li_i1"><p><span>完结</span>/共{{ i['episodes'] }}集/{{ i['country'] }}/{{ i['tv_release'] }}</p></div>
+                            {% endif %}
+                            <div class="search_li_i2"><p>别名: {{ i['alias'] or '无' }}</p></div>
+                            <div class="search_li_i3"><P>主演: {{ i['stars'] }}</P></div>
+                            <div class="search_li_sum"><p>简介: {{ i['summery'] }}</p></div>
+                        </div>
+                    </div>
+            {% endfor %}
+            {% endif %}
+
+
+    {#             <div class="my_pagination">
+                {{ render_pagination(pagination, size='sm', align='center') }}
+                </div> #}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

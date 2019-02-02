@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    {% block head %}
+
+    {% block meta %}    {% endblock meta %}
+
+    <title>{% block title %}{{ title|default }}{% endblock title %}</title>
+    
+    {% block style %} 
+        {{ bootstrap.load_css() }}
+    {% endblock style %}
+    <style>{% block internal_style %}   {% endblock internal_style %}</style>
+
+    
+    {% endblock head %}
+</head>
+<body{% block body_attribs %}{% endblock body_attribs %}>
+    {% block body %}
+
+    {% block navbar %}    {% endblock navbar %}
+    <div class="my-container">
+        {% block content %}
+            
+        {% endblock content %} 
+    </div>
+    {% block page_content %}    {% endblock page_content %}
+    {% block foot %}    {% endblock foot %}
+    {% block scripts %}
+        {{ bootstrap.load_js() }}
+    {% endblock scripts %}
+
+    {% endblock body %}
+</body>
+</html>

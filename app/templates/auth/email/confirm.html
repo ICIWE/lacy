@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    {{ bootstrap.load_css() }}
+    <title>Lacy - 确认邮件</title>
+</head>
+<body>
+    <div class="container">
+        <br>
+        <h2>{{ user.username }} 您好！</h2>
+        <br>
+        <p>欢迎使用Lacy</p>
+        <p>为了方便找回密码，请点击下面的链接来完成注册：
+            <a href="{{ url_for('auth.confirm', user=user.id, token=token, _external=True) }}">
+            {{ url_for('auth.confirm', user=user.id, token=token, _external=True) }}</a>
+        </p>
+        <hr>
+        <p>Lacy</p>
+    </div>
+
+    {{ bootstrap.load_js() }}
+</body>
+</html>

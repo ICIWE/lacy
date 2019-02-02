@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Lacy {% endblock %}
+
+{% block page_content %}    
+
+<div class="my-container">
+    <div class="detail_box index-my-list">
+        <div class="box-header">
+            我的清单
+        </div>
+        <div class="main_content">
+            <div class="row">
+            {% if current_user.is_anonymous %}      {# 对匿名用户显示登录/注册信息 #}
+                <div class="iml-warning m-auto">
+                    <p class="mb-4">请登陆后查看 ... </p>
+                    <a class="btn btn-sm btn-warning" href="{{ url_for('auth.login') }}">登录</a>
+                    <a class="btn btn-sm btn-danger ml-4" href="{{ url_for('auth.signup') }}">注册</a>
+                </div>
+            {% elif current_user.is_authenticated and mylist|count < 1 %}
+                <div class="m-auto">
+                    <p class="mb-4">空空如也，快去追剧吧 ...</p>
+                </div>
+            {% endif %}
+            {% if mylist %}
+                {% for i in mylist %}
+                <div class="col-3">
+                    <div class="sub sub-img">
+                        <a href="{{ url_for('main.tv_detail', tv_id=i['id']) }}" target="_blank">
+                            <img src="{{ url_for('static', filename=i['img_sm']) }}" alt="{{ i['name'] }}">
+                        </a>
+                    </div>
+                    <div class="sub sub-txt">
+                            <p class="p1"><a href="{{ url_for('main.tv_detail', tv_id=i['id']) }}" target="_blank">{{i['name']}}</a></p>
+                            {% if not i['new_episode'] %}
+                            <p class="p2">无更新</p>
+                            {% else %}
+                            <p class="p2">更新至{{ i['new_episode'] }}</p>
+                            {% endif %}
+                            <p class="p2">/</p>
+                            <p class="p2">共{{i['episodes']}}集</p>
+                            {% if HistoryTV.watched_to(current_user, i) %}
+                            <p class="p3">观看至{{ HistoryTV.watched_to(current_user, i) }}</p>
+                            {% else %}
+                            <p class="p3">尚未观看</p>
+                            {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="col-3">
+                    <div class="sub sub-all">
+                        <p class="p-all"><a href="{{ url_for('main.subscribe_list') }}">查看全部</a></p>
+                    </div>
+                </div>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="detail_box">
+        <div class="box-header">
+            最近更新
+        </div>
+        <div class="main_content">
+            <div class="row">
+            {% if new_items %}
+                {% for i in new_items %}
+                <div class="col-3">
+                    <div class="sub sub-img">
+                        <a href="{{ url_for('main.tv_detail', tv_id=i['id']) }}" target="_blank">
+                            <img src="{{ url_for('static', filename=i['img_sm']) }}" alt="{{i['name']}}">
+                        </a>
+                    </div>
+                    <div class="sub sub-txt">
+                            <p class="p1"><a href="{{ url_for('main.tv_detail', tv_id=i['id']) }}" target="_blank">{{i['name']}}</a></p>
+                            <p class="p2" style="color: gray">更新至{{ i.new_episode }}</p>
+                            {% if current_user.is_authenticated and current_user.tv_is_subscribed(i) %}
+                            <a href="javascript:void(0);" class="btn-unsubscribe" onclick="subscribeTV({{ i['id'] }})">已追</a>
+                            {% else %}
+                            <a href="javascript:void(0);" class="btn-subscribe" onclick="subscribeTV({{ i['id'] }})">追剧</a>
+                            {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                {# 查看全部 #}
+                <div class="col-3">
+                    <div class="sub sub-all">
+                        <p class="p-all"><a href="{{ url_for('main.category', serialized='1') }}">查看全部</a></p>
+                    </div>
+                </div>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock page_content %}
